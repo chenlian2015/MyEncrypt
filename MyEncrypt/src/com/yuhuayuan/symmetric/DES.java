@@ -1,4 +1,4 @@
-package com.yuhuayuan;
+package com.yuhuayuan.symmetric;
 
 import java.security.SecureRandom;
 import javax.crypto.spec.DESKeySpec;

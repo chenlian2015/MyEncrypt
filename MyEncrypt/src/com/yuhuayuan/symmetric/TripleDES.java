@@ -1,4 +1,4 @@
-package com.yuhuayuan;
+package com.yuhuayuan.symmetric;
 
 import java.security.MessageDigest;
 import java.util.Arrays;
