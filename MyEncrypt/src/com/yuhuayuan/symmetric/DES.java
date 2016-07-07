@@ -11,7 +11,6 @@ import javax.crypto.Cipher;
 
 　　目前在国内，随着三金工程尤其是金卡工程的启动，DES算法在POS、ATM、磁卡及智能卡（IC卡）、加油站、高速公路收费站等领域被广泛应用，以此来实现关键数据的保密，如信用卡持卡人的PIN的加密传输，IC卡与POS间的双向认证、金融交易数据包的MAC校验等，均用到DES算法。
 
-
 　　DES算法的入口参数有三个：Key、Data、Mode。
 
 　　其中Key为8个字节共64位，是DES算法的工作密钥；
@@ -19,8 +18,6 @@ import javax.crypto.Cipher;
 　　Data也为8个字节64位，是要被加密或被解密的数据；
 
 　　Mode为DES的工作方式，有两种：加密或解密。
-
- 
 
 　　DES算法是这样工作的：
 
