@@ -2,6 +2,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
 
+
 public class DoorServerCommand {
 
 	public enum PropertyIndex {
@@ -29,12 +30,13 @@ public class DoorServerCommand {
 	public static final int nPackLength = 2;
 	public static final int nCommandNameLength = 2;
 	public static final int nAesEncryptedPwd =  16;
-	public static final int nPropertyCode = 1;
+	public static final int nPropertyCodeLength = 1;
 	public static final int nStatus = 1;
 	public static final int nPropertyValue = -1;// 不确定长
 
 	public static final String COMMNAD_NAME_SP = "SP";
 	public static final String COMMNAD_NAME_OP = "OP";
+	public static final String COMMNAD_NAME_GP = "GP";
 
 	public static String getCommandName(byte arr[]) {
 		int nIndexStart = 0;
@@ -111,6 +113,56 @@ public class DoorServerCommand {
 		}
 	}
 
+	public static class GetPropertyStreamServer{
+		
+		short  packLength;
+		String commandName;
+		private PropertyIndex propertyCode;
+		
+		public void parseCommand(byte arr[])
+		{
+			ByteBuffer byteBuffer = ByteBuffer.allocate(arr.length);
+			byteBuffer.put(arr);
+			byteBuffer.position(0);
+
+			packLength = byteBuffer.getShort();
+			
+			byte name[] = new byte[nCommandNameLength];
+			byteBuffer.get(name, 0, nCommandNameLength);
+			try {
+				commandName = new String(name, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+			}
+			setPropertyCode(PropertyIndex.values()[byteBuffer.get()]);
+		}
+
+		public PropertyIndex getPropertyCode() {
+			return propertyCode;
+		}
+
+		public void setPropertyCode(PropertyIndex propertyCode) {
+			this.propertyCode = propertyCode;
+		}
+
+	}
+	
+	public static class GetPropertyServerReturn
+	{
+				
+		public byte[] init(byte propertyCode, byte propertyVlaue[])
+		{
+			short packLength = (short)(nPackLength + nCommandNameLength + nPropertyCodeLength +  propertyVlaue.length);
+			
+			ByteBuffer byteBuffer = ByteBuffer.allocate(packLength);
+			byteBuffer.putShort(packLength);
+			byteBuffer.put(ByteStringTool.convertAsciiStringToBytes(DoorServerCommand.COMMNAD_NAME_GP));
+			byteBuffer.put(propertyCode);
+			byteBuffer.put(propertyVlaue);
+			
+			return byteBuffer.array();
+		}
+	}
+	
 	public static class SetPropertyStreamServer {
 		private short packLength;// 2
 		private String commandName;// 2
@@ -145,8 +197,8 @@ public class DoorServerCommand {
 			
 
 			int propertyValueLength = packLength - byteBuffer.position();
-			propertyValue = new byte[propertyValueLength];
-			byteBuffer.get(propertyValue, 0, propertyValueLength);
+			setPropertyValue(new byte[propertyValueLength]);
+			byteBuffer.get(getPropertyValue(), 0, propertyValueLength);
 		}
 
 		public String toString() {
@@ -155,7 +207,7 @@ public class DoorServerCommand {
 			try {
 				return "SetPropertyStreamServer => packLength:" + packLength + "/commandName:" + getCommandName()
 						+ "/aseEncryptedPwd:" + new String(aseEncryptedPwdTmp, "UTF-8") + "/propertyCode:" + getPropertyCode() + "/propertyValue:"
-						+ new String(propertyValue, "UTF-8");
+						+ new String(getPropertyValue(), "UTF-8");
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -177,6 +229,14 @@ public class DoorServerCommand {
 
 		public void setPropertyCode(byte propertyCode) {
 			this.propertyCode = propertyCode;
+		}
+
+		public byte[] getPropertyValue() {
+			return propertyValue;
+		}
+
+		public void setPropertyValue(byte propertyValue[]) {
+			this.propertyValue = propertyValue;
 		}
 	}
 	

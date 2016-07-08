@@ -3,6 +3,7 @@
 	<name>OpenDoorServer</name>
 	<comment></comment>
 	<projects>
+		<project>MyEncrypt</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
