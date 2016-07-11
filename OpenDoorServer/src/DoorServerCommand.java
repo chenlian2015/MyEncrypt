@@ -35,7 +35,7 @@ public class DoorServerCommand {
 	public static final int nPropertyValue = -1;// 不确定长
 
 	public static final String COMMNAD_NAME_SP = "SP";
-	public static final String COMMNAD_NAME_OP = "OP";
+	public static final String COMMNAD_NAME_OP = "OD";
 	public static final String COMMNAD_NAME_GP = "GP";
 
 	public static String getCommandName(byte arr[]) {

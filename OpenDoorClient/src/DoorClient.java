@@ -88,29 +88,27 @@ public class DoorClient {
 	
 	public static byte openDoor() throws IOException
 	{
-		Socket echoSocket = new Socket(serverHostname, port);
-		OutputStream out = echoSocket.getOutputStream();
-		InputStream in = echoSocket.getInputStream();
+		Socket doorSocket = new Socket(serverHostname, port);
+		OutputStream out = doorSocket.getOutputStream();
+		InputStream in = doorSocket.getInputStream();
 		
-		byte password[] = AES.encrypt(AES.key, AES.initVector, "123abcAB".getBytes("UTF-8"));
 		byte returnParser[] = DoorClientCommand.getOpenDoorCommandStream(DoorClientCommand.COMMNAD_NAME_OP, password);
 		out.write(returnParser);
 		out.flush();
 		
 		byte setPropertyReturn[] = new byte[OpenDoorReturnParser.packLengthCheck];
-
 		int nReaded = in.read(setPropertyReturn);
 		OpenDoorReturnParser PropertySetReturnParser =  DoorClientCommand.parseOpenDoorReturn(setPropertyReturn);
 		
 		in.close();
 		out.close();
-		echoSocket.close();
+		doorSocket.close();
 		
 		return PropertySetReturnParser.getStatus();
 	}
 	
-	public static void main(String[] args) throws IOException {
-
+	private static void testSetGetProperty()
+	{
 		try {
 			Map<DoorClientCommand.PropertyIndex, String> par = new HashMap<DoorClientCommand.PropertyIndex, String>();
 			par.put(DoorClientCommand.PropertyIndex.DOOR_PASSWORD, "odpwd123");
@@ -132,6 +130,9 @@ public class DoorClient {
 			System.err.println("Couldn't get I/O for " + "the connection to: " + serverHostname);
 			System.exit(1);
 		}
-
+	}
+	
+	public static void main(String[] args) throws IOException {
+		openDoor();
 	}
 }

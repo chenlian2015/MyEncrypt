@@ -92,7 +92,8 @@ public class EchoServer2 extends Thread {
 						break;
 					}
 				}
-			} else if (DoorServerCommand.COMMNAD_NAME_GP.equals(commandName))
+			}
+			else if (DoorServerCommand.COMMNAD_NAME_GP.equals(commandName))
 			{
 				while(true)
 				{

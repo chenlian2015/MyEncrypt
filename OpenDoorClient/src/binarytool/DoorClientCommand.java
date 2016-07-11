@@ -42,7 +42,7 @@ public class DoorClientCommand {
 
 	public static final String COMMNAD_NAME_SP = "SP";
 	public static final String COMMNAD_NAME_GP = "GP";
-	public static final String COMMNAD_NAME_OP = "OP";
+	public static final String COMMNAD_NAME_OP = "OD";
 
 	public static byte[] getOpenDoorCommandStream(String parCommandName, byte[] parPassword) {
 		OpenDoorCommandStream openDoorCommandStream = new OpenDoorCommandStream();
@@ -51,7 +51,9 @@ public class DoorClientCommand {
 
 	public static byte[] getGetPropertyStream(String parCommandName, PropertyIndex parPropertyType) {
 		GetPropertyCommandStream getPropertyStream = new GetPropertyCommandStream();
-		return getPropertyStream.init(parCommandName, parPropertyType);
+		byte tmp[];
+		tmp = getPropertyStream.init(parCommandName, parPropertyType);
+		return tmp;
 	}
 
 	public static byte[] getSetPropertyStream(String parCommandName, byte[] parPassword, PropertyIndex parPropertyType,
